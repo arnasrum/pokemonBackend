@@ -1,3 +1,2 @@
-CREATE DATABASE pokemon 
+CREATE DATABASE IF NOT EXISTS pokemon
 	OWNER backend;
-
