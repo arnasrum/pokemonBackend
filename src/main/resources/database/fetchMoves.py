@@ -9,8 +9,8 @@ response = requests.get(url + str(i))
 while True:
     if response.status_code == 200:
         pokemon = response.json()
-        pokedex[str(i)] = pokemon
-        print(i)
+        pokedex[f'{i}'] = pokemon
+        print(f"{i}; {pokemon['name']}")
         i += 1
         response = requests.get(url + str(i))
     else:
