@@ -20,12 +20,14 @@ CREATE TABLE IF NOT EXISTS pokemon(
 );
 
 CREATE TABLE IF NOT EXISTS moves(
-	name TEXT,
 	moveID INT,
+	name TEXT,
 	power INT,
 	accuracy INT,
-	type TEXT,	
-	PRIMARY KEY(moveID)
+	type INT,	
+	priority INT,
+	PRIMARY KEY(moveID),
+	FOREIGN KEY(type) REFERENCES types(id)
 );
 
 CREATE TABLE IF NOT EXISTS pokemonAvailableMoves(

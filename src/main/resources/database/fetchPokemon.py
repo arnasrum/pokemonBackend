@@ -2,16 +2,16 @@ import requests
 import json
 
 pokedex = {}
-i = 1
-response = requests.get(f"https://pokeapi.co/api/v2/pokemon/{i}")
+pokemonPageResponse = requests.get(f"https://pokeapi.co/api/v2/pokemon")
 
 while True:
-    if response.status_code == 200:
-        pokemon = response.json()
-        pokedex[f'{i}'] = pokemon
-        print(f"{i}; {pokemon['name']}") 
-        i += 1
-        response = requests.get(f"https://pokeapi.co/api/v2/pokemon/{i}")
+    pokemonPage = pokemonPageResponse.json()
+    for pokemon in pokemonPage['results']:
+        pokemonData = requests.get(f"{pokemon['url']}").json()
+        print(pokemonData['id'])
+        pokedex[f"{pokemonData['id']}"] = pokemonData
+    if pokemonPage['next'] != None:
+        pokemonPageResponse = requests.get(f"{pokemonPage['next']}")
     else:
         break
 
