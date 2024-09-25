@@ -36,6 +36,8 @@ def writePokemonToDatabase(cur):
         for pokedexID in data.keys():
             relavantData['name'] = data[pokedexID]['name']
             relavantData['id'] = data[pokedexID]['id']
+            relavantData['sprite_front'] = data[pokedexID]["sprites"]['front_default']
+            relavantData['sprite_back'] = data[pokedexID]['sprites']['back_default']
             for stat in data[pokedexID]['stats']:
                 relavantData[stat['stat']['name']] = stat['base_stat'] 
             for typeData in data[pokedexID]['types']:
@@ -47,27 +49,29 @@ def writePokemonToDatabase(cur):
                     """
                     INSERT INTO pokemon(name, pokedexID, type1, hp, attack,
                             defense, special_attack, special_defense,
-                            speed)
-                    VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s);
+                            speed, sprite_front, sprite_back)
+                    VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s);
                     """,
                 (relavantData['name'], relavantData['id'], 
                 relavantData['type1'], relavantData['hp'],
                 relavantData['attack'], relavantData['defense'], 
                 relavantData['special-attack'], relavantData['special-defense'], 
-                relavantData['speed']))                   
+                relavantData['speed'], relavantData['sprite_front'],
+                relavantData['sprite_back']))                   
             else:
                 cur.execute(
                     """
                     INSERT INTO pokemon(name, pokedexID, type1, type2, hp, attack,
                             defense, special_attack, special_defense,
-                            speed)
-                    VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s);
+                            speed, sprite_front, sprite_back)
+                    VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s);
                     """,
                 (relavantData['name'], relavantData['id'], 
                 relavantData['type1'], relavantData['type2'],
                 relavantData['hp'], relavantData['attack'], 
                 relavantData['defense'], relavantData['special-attack'], 
-                relavantData['special-defense'], relavantData['speed']))
+                relavantData['special-defense'], relavantData['speed'],
+                relavantData['sprite_front'], relavantData['sprite_back']))
 
             relavantData.clear()
 

@@ -14,6 +14,8 @@ CREATE TABLE IF NOT EXISTS pokemon(
 	hp INT, attack INT,
 	defense INT, special_attack INT,
     special_defense INT, speed INT,
+	sprite_front TEXT,
+	sprite_back TEXT,
 	PRIMARY KEY(name, pokedexID),
 	FOREIGN KEY(type1) REFERENCES types(id),
 	FOREIGN KEY(type2) REFERENCES types(id)
