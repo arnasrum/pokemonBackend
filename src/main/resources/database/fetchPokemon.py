@@ -1,6 +1,7 @@
 import requests
 import json
 
+
 pokedex = {}
 pokemonPageResponse = requests.get(f"https://pokeapi.co/api/v2/pokemon")
 
@@ -8,8 +9,9 @@ while True:
     pokemonPage = pokemonPageResponse.json()
     for pokemon in pokemonPage['results']:
         pokemonData = requests.get(f"{pokemon['url']}").json()
-        print(pokemonData['id'])
+        print(f"{pokemonData['id']} - {pokemonData['name']}")
         pokedex[f"{pokemonData['id']}"] = pokemonData
+
     if pokemonPage['next'] != None:
         pokemonPageResponse = requests.get(f"{pokemonPage['next']}")
     else:

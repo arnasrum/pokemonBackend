@@ -16,16 +16,17 @@ def writeTypesToDatabase(cur):
             )
 
 def writeLearnedByPokemon(cur):
-    with open("learnedByPokemon.json", "r") as file:
+    with open("moves.json", "r") as file:
         moveData = json.load(file)
         for moveID in moveData:
-            for pokemon in moveData[moveID]:
+            for pokemon in moveData[moveID]["learned_by_pokemon"]:
+                pokemonID = pokemon["url"].split("/")[-2]
                 cur.execute(
                     """
-                    INSERT INTO pokemonavailablemoves(moveid, pokemonid, pokemonname)
-                    VALUES(%s, %s, %s)
+                    INSERT INTO pokemonavailablemoves(moveid, pokemonid)
+                    VALUES(%s, %s)
                     """,
-                    (moveID, pokemon['id'], pokemon['name'])
+                    (moveID, pokemonID)
                 )
 
 
