@@ -1,11 +1,10 @@
-package com.arnas.pokemans
+package com.arnas.pokemans.controllers
 
 import com.arnas.pokemans.dataclasses.Pokemon
 import com.arnas.pokemans.repository.PokemonRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.bind.annotation.RestController
-
 
 @CrossOrigin
 @RestController
@@ -14,14 +13,13 @@ class RestController {
     @Autowired
     lateinit var pokemonRepository: PokemonRepository
 
-
     @GetMapping("/pokemon/{name}")
     fun getPokemon(@PathVariable name: String): Pokemon? {
         // Sanitize input from url variable
         return pokemonRepository.getPokemonByName(name)
     }
 
-    @GetMapping("/pokemon")
+    @GetMapping("/pokemon/")
     fun getAllPokemon(): MutableList<Pokemon> {
         // Sanitize input from url variable
         return pokemonRepository.getAllPokemon()
