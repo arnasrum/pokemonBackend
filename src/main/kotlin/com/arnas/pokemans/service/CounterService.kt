@@ -59,7 +59,9 @@ class CounterService {
         }
         getPotentialPokemon(effectiveTypes, targetPokemon).sortedByDescending{ it.second }.forEach { pair ->
             potentialPokemon.add(pair)
-            counters.add(pair.first)
+            if(!counters.contains(pair.first)) {
+                counters.add(pair.first)
+            }
         }
         return counters
     }
