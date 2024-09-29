@@ -10,6 +10,6 @@ data class PokemonStats(val hp: Int, val attack: Int, val defense: Int,
 
 data class Pokemon(
     val name: String, val pokedexID: Int,
-    val type: PokemonType, val stats: PokemonStats,
-    val sprites: PokemonSprites
+    val type: PokemonType?, val stats: PokemonStats,
+    val sprites: PokemonSprites, val type1: Int, val type2: Int?
 )
