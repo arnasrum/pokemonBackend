@@ -76,6 +76,7 @@ class CounterService {
                 if(max(physicalDiff, specialDiff) > 10 &&
                     !pokemon.name.contains("-gmax") &&
                     !pokemon.name.contains("-mega") &&
+                    !pokemon.name.contains("-primal") &&
                     !pokemon.name.contains("-ultra")) {
                     potentialPokemon.add(Pair(pokemon, max(physicalDiff, specialDiff)))
                 }
@@ -83,7 +84,4 @@ class CounterService {
         }
         return potentialPokemon
     }
-
-
-
 }
