@@ -1,5 +1,9 @@
 import psycopg
+import os
 import json
+from fetchTypes import fetchTypes
+from fetchPokemon import fetchPokemon
+from fetchMoves import fetchMoves
 
 
 
@@ -106,6 +110,12 @@ def writeMoves(cur):
 
 
 with psycopg.connect("dbname=pokemon user=backend password=123qwe") as connection:
+
+    if(not os.path.isfile("./types.json")): fetchTypes()
+    if(not os.path.isfile("./pokemon.json")): fetchPokemon()
+    if(not os.path.isfile("./moves.json")): fetchMoves()
+    #if(not os.path.isfile("./damageRelations.json")): fetchMoves()
+
     with connection.cursor() as cur:
         writeTypesToDatabase(cur)
         writePokemonToDatabase(cur)

@@ -1,19 +1,22 @@
 import requests
 import json
 
-movedex = {}
-movePage = requests.get("https://pokeapi.co/api/v2/move/")
+def fetchMoves():
+    print("fetching moves")
 
-while True:
-    movePageData = movePage.json()        
-    for move in movePageData['results']:
-        moveData = requests.get(move['url']).json()
-        print(moveData['id'])
-        movedex[f"{moveData['id']}"] = moveData
-    if movePageData['next'] != None:
-        movePage = requests.get(movePageData['next'])
-    else:
-        break
+    movedex = {}
+    movePage = requests.get("https://pokeapi.co/api/v2/move/")
 
-with open("moves.json", "w") as file:
-    json.dump(movedex, file)
+    while True:
+        movePageData = movePage.json()        
+        for move in movePageData['results']:
+            moveData = requests.get(move['url']).json()
+            movedex[f"{moveData['id']}"] = moveData
+            print(f"{moveData['id']} - {moveData['name']}")
+        if movePageData['next'] != None:
+            movePage = requests.get(movePageData['next'])
+        else:
+            break
+
+    with open("moves.json", "w") as file:
+        json.dump(movedex, file)
