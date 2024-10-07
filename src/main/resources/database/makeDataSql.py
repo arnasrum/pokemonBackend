@@ -9,9 +9,9 @@ from fetchMoves import fetchMoves
 
 def makeInsertStatement(header, dataTuples):
     dataTuples[-1] = dataTuples[-1] + ";\n"
-    pattern = re.compile(r"None")
     for i, tuple in enumerate(dataTuples):
         tuple = tuple.replace("None", "null")
+        tuple = tuple.replace("'null'", "null")
         dataTuples[i] = tuple
     return f"{header}\n" + ",\n".join(dataTuples)
 
@@ -42,39 +42,30 @@ def makeMoveLearnedInsertStatement():
 def makePokemonInsertStatement():
     with open("pokemon.json") as file:
         data = json.load(file)
-        relevantData = {}
+        pokemonData = {}
 
         insertWithBothTypes = f"INSERT INTO pokemon(name, pokedexID, type1, type2, hp, attack, defense, special_attack, special_defense, speed, sprite_front, sprite_back) VALUES"
         insertWithOneType = f"INSERT INTO pokemon(name, pokedexID, type1, hp, attack, defense, special_attack, special_defense, speed, sprite_front, sprite_back) VALUES"
         oneTypeData = []
         twoTypeData = []
 
-
         for pokedexID in data.keys():
-            relevantData.clear()
-            relevantData['name'] = f"'{data[pokedexID]['name']}'"
-            relevantData['id'] = data[pokedexID]['id']
-            relevantData['sprite_front'] = data[pokedexID]["sprites"]['front_default']
-            relevantData['sprite_back'] = data[pokedexID]['sprites']['back_default']
-            if relevantData["sprite_front"]:
-                relevantData["sprite_front"] = f"'{relevantData['sprite_front']}'"
-            if relevantData["sprite_back"]:
-                relevantData["sprite_back"] = f"'{relevantData['sprite_back']}'"
+            pokemonData = data[pokedexID]
 
             for stat in data[pokedexID]['stats']:
-                relevantData[stat['stat']['name']] = stat['base_stat'] 
+                pokemonData[stat['stat']['name']] = stat['base_stat'] 
             for typeData in data[pokedexID]['types']:
                 typeID = typeData["type"]["url"].split("/")[-2]
-                relevantData[f'type{typeData["slot"]}'] = typeID
+                pokemonData[f'type{typeData["slot"]}'] = typeID
 
-            dataTuple = [str(relevantData['name']), int(relevantData['id']), 
-                int(relevantData['type1']), int(relevantData['hp']), int(relevantData['attack']), 
-                int(relevantData['defense']), int(relevantData['special-attack']), 
-                int(relevantData['special-defense']), int(relevantData['speed']),
-                str(relevantData['sprite_front']), str(relevantData['sprite_back'])]
+            dataTuple = [f"'{str(pokemonData['name'])}'", int(pokemonData['id']), 
+                int(pokemonData['type1']), int(pokemonData['hp']), int(pokemonData['attack']), 
+                int(pokemonData['defense']), int(pokemonData['special-attack']), 
+                int(pokemonData['special-defense']), int(pokemonData['speed']),
+                f"'{str(pokemonData['sprites']['front_default'])}'", f"'{str(pokemonData['sprites']['back_default'])}'"]
 
-            if "type2" in relevantData:
-                dataTuple.insert(3, int(relevantData["type2"]))
+            if "type2" in pokemonData:
+                dataTuple.insert(3, int(pokemonData["type2"]))
                 twoTypeData.append("(" + ", ".join([str(element) for element in dataTuple]) + ")")
                 continue
             oneTypeData.append("(" + ", ".join([str(element) for element in dataTuple]) + ")")
@@ -103,8 +94,6 @@ def makeMoveInsertStatement():
             typeID = move['type']['url'].split("/")[-2]
             dataTuples.append(f"({int(moveID)}, '{str(move['name'])}', {move['power']}, {move['accuracy']}, {int(typeID)}, {int(move['priority'])})")
         return makeInsertStatement(header, dataTuples)
-
-
 
 if __name__ == "__main__":
     if(not os.path.isfile("./types.json")): fetchTypes()
